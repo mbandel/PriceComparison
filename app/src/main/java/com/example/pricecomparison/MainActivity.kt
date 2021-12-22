@@ -33,6 +33,6 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     PriceComparisonTheme {
-        Greeting("Androida")
+        Greeting("Androidap")
     }
 }
