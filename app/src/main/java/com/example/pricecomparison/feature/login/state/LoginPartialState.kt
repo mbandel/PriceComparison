@@ -8,7 +8,7 @@ sealed interface LoginPartialState : PartialState<LoginState> {
             oldState.copy(email = email)
     }
 
-    data class PasswordChanged(val password: String): LoginPartialState {
+    data class PasswordChanged(val password: String) : LoginPartialState {
         override fun reduce(oldState: LoginState): LoginState =
             oldState.copy(password = password)
     }
@@ -23,13 +23,23 @@ sealed interface LoginPartialState : PartialState<LoginState> {
             oldState.copy(isEmailCorrect = true)
     }
 
-    object ShowPasswordError: LoginPartialState {
+    object ShowPasswordError : LoginPartialState {
         override fun reduce(oldState: LoginState): LoginState =
             oldState.copy(isPasswordCorrect = false)
     }
 
-    object HidePasswordError: LoginPartialState {
+    object HidePasswordError : LoginPartialState {
         override fun reduce(oldState: LoginState): LoginState =
             oldState.copy(isPasswordCorrect = true)
+    }
+
+    object ShowProgressBar : LoginPartialState {
+        override fun reduce(oldState: LoginState): LoginState =
+            oldState.copy(isLoading = true)
+    }
+
+    object HideProgressBar : LoginPartialState {
+        override fun reduce(oldState: LoginState): LoginState =
+            oldState.copy(isLoading = false)
     }
 }

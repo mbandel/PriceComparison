@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">PriceComparison</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
+    <string name="login_login">Login</string>
+    <string name="login_wrong_email">Incorrect email format</string>
+    <string name="login_wrong_password">Password must contain at least 6 characters, one lower case letter, one upper case letter and one digit</string>
 </resources>
