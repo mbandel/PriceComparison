@@ -56,6 +56,8 @@ fun LoginScreen(processor: LoginProcessor) {
         )
         Spacer(modifier = Modifier.height(30.dp))
         LoginButton(processor = processor)
+        Spacer(modifier = Modifier.height(30.dp))
+        ProgressIndicator(processor = processor)
     }
 }
 
@@ -100,7 +102,10 @@ private fun EmailField(
             onValueChange = { processor.sendEvent(LoginEvent.EmailChanged(it)) },
             label = {
                 Row {
-                    Icon(imageVector = Icons.Filled.Email, contentDescription = "email")
+                    Icon(
+                        imageVector = Icons.Filled.Email,
+                        contentDescription = null
+                    )
                     Spacer(modifier = Modifier.width(SmallPadding))
                     Text(text = stringResource(id = R.string.login_email))
                 }
@@ -213,6 +218,13 @@ private fun LoginButton(processor: LoginProcessor) {
             contentColor = Color.White
         )
     )
+}
+
+@Composable
+private fun ProgressIndicator(processor: LoginProcessor) {
+    val isLoading by processor.collectAsState { it.isLoading }
+    if (isLoading)
+        CircularProgressIndicator()
 }
 
 @Preview(showBackground = true)

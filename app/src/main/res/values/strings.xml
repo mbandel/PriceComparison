@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PriceComparison</string>
+    <string name="app_name">Price Comparison</string>
     <string name="login_email">Email</string>
     <string name="login_password">Password</string>
     <string name="login_login">Login</string>

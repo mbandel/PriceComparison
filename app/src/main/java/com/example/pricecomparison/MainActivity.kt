@@ -6,10 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pricecomparison.feature.login.LoginScreen
 import com.example.pricecomparison.feature.login.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // val viewModel: LoginViewModel by viewModels()
         setContent {
             LoginScreen(processor = viewModel<LoginViewModel>().processor)
         }

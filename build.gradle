@@ -1,7 +1,7 @@
 buildscript {
     ext {
         compose_version = '1.0.5'
-        ellipse_version = '0.9.6'
+        ellipse_version = '0.9.7'
         retrofit_version = '2.9.0'
         hilt_dagger_version = '2.40.1'
         mockk_version = '1.12.1'

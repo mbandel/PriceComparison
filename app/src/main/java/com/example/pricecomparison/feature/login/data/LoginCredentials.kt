@@ -1,4 +1,4 @@
-package com.example.pricecomparison.feature.login
+package com.example.pricecomparison.feature.login.data
 
 data class LoginCredentials(
     val email: String,
