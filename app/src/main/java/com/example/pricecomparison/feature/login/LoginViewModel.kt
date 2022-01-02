@@ -3,7 +3,7 @@ package com.example.pricecomparison.feature.login
 import android.util.Patterns.EMAIL_ADDRESS
 import androidx.lifecycle.ViewModel
 import com.example.pricecomparison.feature.login.data.LoginCredentials
-import com.example.pricecomparison.feature.login.data.LoginResponse
+import com.example.pricecomparison.feature.login.data.LoginStatus
 import com.example.pricecomparison.feature.login.state.LoginEffect
 import com.example.pricecomparison.feature.login.state.LoginEvent
 import com.example.pricecomparison.feature.login.state.LoginPartialState
@@ -14,6 +14,7 @@ import com.tomcz.ellipse.common.processor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 typealias LoginProcessor = Processor<LoginEvent, LoginState, LoginEffect>
@@ -22,7 +23,9 @@ typealias LoginProcessor = Processor<LoginEvent, LoginState, LoginEffect>
 class LoginViewModel @Inject constructor(
     private val loginRepository: LoginRepository
 ) : ViewModel() {
-    val processor: LoginProcessor = processor(initialState = LoginState()) { event ->
+    val processor: LoginProcessor = processor(
+        initialState = LoginState()
+    ) { event ->
         when (event) {
             is LoginEvent.EmailChanged -> handleEmailChanged(event.email)
             is LoginEvent.PasswordChanged -> handlePasswordChange(event.password)
@@ -30,6 +33,8 @@ class LoginViewModel @Inject constructor(
                 effects,
                 LoginCredentials(event.email, event.password)
             )
+            is LoginEvent.ConfirmServerError -> flowOf(LoginPartialState.HideServerError)
+            is LoginEvent.ConfirmInvalidCredentialsError -> flowOf(LoginPartialState.HideInvalidCredentialsError)
         }
     }
 
@@ -57,20 +62,16 @@ class LoginViewModel @Inject constructor(
     ) = flow {
         loginRepository.authenticate(credentials).collect { loginResponse ->
             when (loginResponse) {
-                is LoginResponse.Loading -> emit(LoginPartialState.ShowProgressBar)
-                is LoginResponse.ServerError -> {
-                    effects.send(
-                        LoginEffect.ShowError("server error")
-                    )
+                is LoginStatus.Loading -> emit(LoginPartialState.ShowProgressBar)
+                is LoginStatus.ServerError -> {
+                    emit(LoginPartialState.ShowServerError)
                     emit(LoginPartialState.HideProgressBar)
                 }
-                is LoginResponse.InvalidCredentials -> {
-                    effects.send(
-                        LoginEffect.ShowError("invalid credentials")
-                    )
+                is LoginStatus.IncorrectCredentials -> {
+                    emit(LoginPartialState.ShowInvalidCredentialsError)
                     emit(LoginPartialState.HideProgressBar)
                 }
-                is LoginResponse.Success -> {
+                is LoginStatus.Success -> {
                     effects.send(
                         LoginEffect.GoToCategories
                     )

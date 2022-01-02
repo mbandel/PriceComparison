@@ -26,38 +26,75 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.pricecomparison.R
+import com.example.pricecomparison.feature.login.state.LoginEffect
 import com.example.pricecomparison.feature.login.state.LoginEvent
 import com.example.pricecomparison.feature.login.state.LoginState
 import com.example.pricecomparison.ui.theme.LargePadding
 import com.example.pricecomparison.ui.theme.Shapes
 import com.example.pricecomparison.ui.theme.SmallPadding
 import com.tomcz.ellipse.common.collectAsState
+import com.tomcz.ellipse.common.collectEffect
 import com.tomcz.ellipse.common.previewProcessor
 
 @Composable
 fun LoginScreen(processor: LoginProcessor) {
     val focusManager = LocalFocusManager.current
     val passwordFocus = FocusRequester()
+    val isShowingServerError by processor.collectAsState {
+        it.isShowingServerError
+    }
+    val isShowingInvalidCredentialsError by processor.collectAsState {
+        it.isShowingInvalidCredentialsError
+    }
+    processor.collectEffect(collect = { event ->
+        when (event) {
+            is LoginEffect.GoToCategories -> println("Login Clicked")
+        }
+    })
+
     Column(
-        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = LargePadding)
     ) {
-        Spacer(modifier = Modifier.height(30.dp))
-        Title()
-        Spacer(modifier = Modifier.height(30.dp))
-        EmailField(
-            processor = processor,
-            keyboardActions = KeyboardActions { passwordFocus.requestFocus() }
-        )
-        Spacer(modifier = Modifier.height(30.dp))
-        PasswordField(
-            processor = processor,
-            keyboardActions = KeyboardActions { focusManager.clearFocus() },
-            modifier = Modifier.focusRequester(passwordFocus)
-        )
-        Spacer(modifier = Modifier.height(30.dp))
-        LoginButton(processor = processor)
-        Spacer(modifier = Modifier.height(30.dp))
-        ProgressIndicator(processor = processor)
+        Column {
+            Spacer(modifier = Modifier.height(30.dp))
+            Title()
+            Spacer(modifier = Modifier.height(30.dp))
+            EmailField(
+                processor = processor,
+                keyboardActions = KeyboardActions { passwordFocus.requestFocus() }
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            PasswordField(
+                processor = processor,
+                keyboardActions = KeyboardActions { focusManager.clearFocus() },
+                modifier = Modifier.focusRequester(passwordFocus)
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            LoginButton(processor = processor)
+            Spacer(modifier = Modifier.height(30.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                ProgressIndicator(processor = processor)
+            }
+        }
+
+        Column {
+            if (isShowingServerError)
+                ErrorSnackBar(
+                    message = stringResource(id = R.string.login_server_error),
+                    sendEvent = { processor.sendEvent(LoginEvent.ConfirmServerError) }
+                )
+            if (isShowingInvalidCredentialsError)
+                ErrorSnackBar(
+                    message = stringResource(id = R.string.login_invalid_credentials_error),
+                    sendEvent = { processor.sendEvent(LoginEvent.ConfirmInvalidCredentialsError) }
+                )
+        }
     }
 }
 
@@ -65,8 +102,7 @@ fun LoginScreen(processor: LoginProcessor) {
 private fun Title() {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = LargePadding),
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
@@ -95,13 +131,13 @@ private fun EmailField(
     Column {
         OutlinedTextField(
             value = email,
-            modifier = Modifier
-                .padding(horizontal = LargePadding)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             shape = Shapes.medium,
             onValueChange = { processor.sendEvent(LoginEvent.EmailChanged(it)) },
             label = {
-                Row {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
                         imageVector = Icons.Filled.Email,
                         contentDescription = null
@@ -149,13 +185,13 @@ private fun PasswordField(
         OutlinedTextField(
             value = password,
             onValueChange = { processor.sendEvent(LoginEvent.PasswordChanged(it)) },
-            modifier = modifier
-                .padding(horizontal = LargePadding)
-                .fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),
             shape = Shapes.medium,
             visualTransformation = PasswordVisualTransformation(),
             label = {
-                Row {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
                         imageVector = Icons.Filled.Lock,
                         contentDescription = null
@@ -194,10 +230,10 @@ private fun PasswordField(
 private fun LoginButton(processor: LoginProcessor) {
     val email by processor.collectAsState { it.email }
     val password by processor.collectAsState { it.password }
+    val isEmailCorrect by processor.collectAsState { it.isEmailCorrect }
+    val isPasswordCorrect by processor.collectAsState { it.isPasswordCorrect }
     Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = LargePadding),
+        modifier = Modifier.fillMaxWidth(),
         onClick = {
             processor.sendEvent(
                 LoginEvent.LoginClick(
@@ -216,7 +252,12 @@ private fun LoginButton(processor: LoginProcessor) {
         colors = ButtonDefaults.buttonColors(
             backgroundColor = colorResource(id = R.color.design_default_color_secondary_variant),
             contentColor = Color.White
-        )
+        ),
+        enabled =
+        isEmailCorrect &&
+            isPasswordCorrect &&
+            email.isNotEmpty() &&
+            password.isNotEmpty()
     )
 }
 
@@ -224,7 +265,21 @@ private fun LoginButton(processor: LoginProcessor) {
 private fun ProgressIndicator(processor: LoginProcessor) {
     val isLoading by processor.collectAsState { it.isLoading }
     if (isLoading)
-        CircularProgressIndicator()
+        LinearProgressIndicator()
+}
+
+@Composable
+private fun ErrorSnackBar(message: String, sendEvent: () -> Unit) {
+    Snackbar(
+        modifier = Modifier.padding(SmallPadding),
+        action = {
+            Button(onClick = sendEvent) {
+                Text(text = stringResource(id = R.string.login_ok))
+            }
+        }
+    ) {
+        Text(text = message)
+    }
 }
 
 @Preview(showBackground = true)

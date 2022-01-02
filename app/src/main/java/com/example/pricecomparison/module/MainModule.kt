@@ -1,4 +1,4 @@
-package com.example.pricecomparison
+package com.example.pricecomparison.module
 
 import com.example.pricecomparison.feature.login.LoginRepository
 import com.example.pricecomparison.feature.login.LoginRepositoryImpl
@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface AppMainModule {
+interface MainModule {
     @Binds
     fun provideLoginRepository(
         loginRepositoryImpl: LoginRepositoryImpl

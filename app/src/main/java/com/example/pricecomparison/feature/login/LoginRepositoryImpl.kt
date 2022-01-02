@@ -1,29 +1,30 @@
 package com.example.pricecomparison.feature.login
 
-import android.util.Log
 import com.example.pricecomparison.apiservice.ApiService
 import com.example.pricecomparison.feature.login.data.LoginCredentials
-import com.example.pricecomparison.feature.login.data.LoginResponse
+import com.example.pricecomparison.feature.login.data.LoginStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.lang.Exception
+import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(
     private val apiService: ApiService
 ) : LoginRepository {
-    override suspend fun authenticate(credentials: LoginCredentials): Flow<LoginResponse> = flow {
-        emit(LoginResponse.Loading)
-        val request = apiService.authenticate(credentials)
+    override suspend fun authenticate(credentials: LoginCredentials): Flow<LoginStatus> = flow {
+        emit(LoginStatus.Loading)
         try {
-            if (request.isSuccessful) {
-                emit(LoginResponse.Success)
+            val response = apiService.authenticate(credentials)
+            if (response.isSuccessful) {
+                emit(LoginStatus.Success(response.body()!!))
+                println("LOGIN_SUCCESS")
             } else {
-                emit(LoginResponse.InvalidCredentials)
+                emit(LoginStatus.IncorrectCredentials)
+                println("LOGIN_INVALID_CRED")
             }
-        } catch (e: Exception) {
-            emit(LoginResponse.ServerError)
-            Log.d("LOGIN_TAG", e.toString())
+        } catch (e: SocketTimeoutException) {
+            emit(LoginStatus.ServerError)
+            println(e.toString())
         }
     }
 }

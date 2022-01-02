@@ -42,4 +42,24 @@ sealed interface LoginPartialState : PartialState<LoginState> {
         override fun reduce(oldState: LoginState): LoginState =
             oldState.copy(isLoading = false)
     }
+
+    object ShowServerError : LoginPartialState {
+        override fun reduce(oldState: LoginState): LoginState =
+            oldState.copy(isShowingServerError = true)
+    }
+
+    object HideServerError : LoginPartialState {
+        override fun reduce(oldState: LoginState): LoginState =
+            oldState.copy(isShowingServerError = false)
+    }
+
+    object ShowInvalidCredentialsError : LoginPartialState {
+        override fun reduce(oldState: LoginState): LoginState =
+            oldState.copy(isShowingInvalidCredentialsError = true)
+    }
+
+    object HideInvalidCredentialsError : LoginPartialState {
+        override fun reduce(oldState: LoginState): LoginState =
+            oldState.copy(isShowingInvalidCredentialsError = false)
+    }
 }

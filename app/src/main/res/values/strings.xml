@@ -5,4 +5,7 @@
     <string name="login_login">Login</string>
     <string name="login_wrong_email">Incorrect email format</string>
     <string name="login_wrong_password">Password must contain at least 6 characters, one lower case letter, one upper case letter and one digit</string>
+    <string name="login_server_error">Connection error.\nTry again later</string>
+    <string name="login_invalid_credentials_error">Wrong email or password.\nTry again.</string>
+    <string name="login_ok">OK</string>
 </resources>
