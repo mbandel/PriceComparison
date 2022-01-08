@@ -5,5 +5,5 @@ import com.example.pricecomparison.feature.login.data.LoginStatus
 import kotlinx.coroutines.flow.Flow
 
 interface LoginRepository {
-    suspend fun authenticate(credentials: LoginCredentials): Flow<LoginStatus>
+    fun authenticate(credentials: LoginCredentials): Flow<LoginStatus>
 }
