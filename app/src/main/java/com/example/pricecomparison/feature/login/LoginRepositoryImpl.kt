@@ -19,9 +19,11 @@ class LoginRepositoryImpl @Inject constructor(
             if (response.isSuccessful) {
                 response.body()?.let {
                     emit(LoginStatus.Success(it.token))
+                    println("Success")
                 }
             } else {
                 emit(LoginStatus.IncorrectCredentials)
+                println("incorrect credentials")
             }
         } catch (e: IOException) {
             emit(LoginStatus.ServerError)

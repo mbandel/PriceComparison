@@ -8,6 +8,7 @@ import com.example.pricecomparison.feature.login.state.LoginEffect
 import com.example.pricecomparison.feature.login.state.LoginEvent
 import com.example.pricecomparison.feature.login.state.LoginPartialState
 import com.example.pricecomparison.feature.login.state.LoginState
+import com.example.pricecomparison.util.FieldValidation
 import com.tomcz.ellipse.EffectsCollector
 import com.tomcz.ellipse.Processor
 import com.tomcz.ellipse.common.processor
@@ -40,7 +41,7 @@ class LoginViewModel @Inject constructor(
 
     private fun handleEmailChanged(email: String) = flow {
         emit(LoginPartialState.EmailChanged(email))
-        if (isEmailValid(email)) {
+        if (FieldValidation.isEmailValid(email)) {
             emit(LoginPartialState.HideEmailError)
         } else {
             emit(LoginPartialState.ShowEmailError)
@@ -49,7 +50,7 @@ class LoginViewModel @Inject constructor(
 
     private fun handlePasswordChange(password: String) = flow {
         emit(LoginPartialState.PasswordChanged(password))
-        if (isPasswordValid(password)) {
+        if (FieldValidation.isPasswordValid(password)) {
             emit(LoginPartialState.HidePasswordError)
         } else {
             emit(LoginPartialState.ShowPasswordError)
@@ -72,20 +73,10 @@ class LoginViewModel @Inject constructor(
                     emit(LoginPartialState.HideProgressBar)
                 }
                 is LoginStatus.Success -> {
-                    effects.send(
-                        LoginEffect.GoToCategories
-                    )
+                    effects.send(LoginEffect.GoToCategories)
                     emit(LoginPartialState.HideProgressBar)
                 }
             }
         }
-    }
-
-    private fun isEmailValid(email: String): Boolean =
-        EMAIL_ADDRESS.matcher(email).matches()
-
-    private fun isPasswordValid(password: String): Boolean {
-        val passwordPattern = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}\$"
-        return password.matches(Regex(passwordPattern))
     }
 }
