@@ -3,8 +3,8 @@ package com.example.pricecomparison.feature.login
 import com.example.pricecomparison.apiservice.ApiService
 import com.example.pricecomparison.feature.login.data.LoginCredentials
 import com.example.pricecomparison.feature.login.data.LoginStatus
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import java.io.IOException
 import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(
@@ -12,7 +12,7 @@ class LoginRepositoryImpl @Inject constructor(
 ) : LoginRepository {
     override fun authenticate(
         credentials: LoginCredentials
-    ) = flow {
+    ): Flow<LoginStatus> = flow {
         emit(LoginStatus.Loading)
         try {
             val response = apiService.authenticate(credentials)
@@ -25,7 +25,7 @@ class LoginRepositoryImpl @Inject constructor(
                 emit(LoginStatus.IncorrectCredentials)
                 println("incorrect credentials")
             }
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             emit(LoginStatus.ServerError)
         }
     }

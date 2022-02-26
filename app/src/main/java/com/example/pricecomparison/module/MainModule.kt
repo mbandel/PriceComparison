@@ -2,6 +2,8 @@ package com.example.pricecomparison.module
 
 import com.example.pricecomparison.feature.login.LoginRepository
 import com.example.pricecomparison.feature.login.LoginRepositoryImpl
+import com.example.pricecomparison.feature.register.RegisterRepository
+import com.example.pricecomparison.feature.register.state.RegisterRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,4 +16,9 @@ interface MainModule {
     fun provideLoginRepository(
         loginRepositoryImpl: LoginRepositoryImpl
     ): LoginRepository
+
+    @Binds
+    fun provideRegisterRepository(
+        registerRepositoryImpl: RegisterRepositoryImpl
+    ): RegisterRepository
 }

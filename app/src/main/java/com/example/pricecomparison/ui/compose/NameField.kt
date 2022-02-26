@@ -1,6 +1,6 @@
 package com.example.pricecomparison.ui.compose
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.* // ktlint-disable no-wildcard-imports
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -9,51 +9,49 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.example.pricecomparison.R
 import com.example.pricecomparison.ui.theme.LargePadding
 import com.example.pricecomparison.ui.theme.Shapes
 import com.example.pricecomparison.ui.theme.SmallPadding
 
 @Composable
-fun PasswordField(
+fun NameField(
     value: String,
-    isPasswordCorrect: Boolean,
-    keyboardActions: KeyboardActions,
     modifier: Modifier = Modifier,
+    keyboardActions: KeyboardActions,
+    isNameCorrect: Boolean,
     errorMessage: String,
-    onValueChange: (password: String) -> Unit
+    onValueChange: (name: String) -> Unit
 ) {
     Column {
         OutlinedTextField(
             value = value,
-            onValueChange = { onValueChange(it) },
             modifier = modifier.fillMaxWidth(),
             shape = Shapes.medium,
-            visualTransformation = PasswordVisualTransformation(),
+            onValueChange = { onValueChange(it) },
             label = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.Lock,
+                        imageVector = Icons.Filled.Person,
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(SmallPadding))
-                    Text(text = stringResource(id = R.string.login_password))
+                    Text(text = stringResource(id = R.string.login_email))
                 }
             },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             keyboardActions = keyboardActions,
             trailingIcon = {
-                if (!isPasswordCorrect) {
+                if (!isNameCorrect) {
                     Icon(
                         imageVector = Icons.Filled.Error,
                         contentDescription = null,
@@ -62,8 +60,7 @@ fun PasswordField(
                 }
             }
         )
-
-        if (!isPasswordCorrect) {
+        if (!isNameCorrect) {
             Text(
                 text = errorMessage,
                 color = Color.Red,

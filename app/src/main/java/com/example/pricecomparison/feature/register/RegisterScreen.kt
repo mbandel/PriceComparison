@@ -1,32 +1,110 @@
 package com.example.pricecomparison.feature.register
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.* // ktlint-disable no-wildcard-imports
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.pricecomparison.navigation.Screen
+import com.example.pricecomparison.R
+import com.example.pricecomparison.feature.register.state.RegisterEvent
+import com.example.pricecomparison.feature.register.state.RegisterState
 import com.example.pricecomparison.ui.compose.EmailField
+import com.example.pricecomparison.ui.compose.NameField
+import com.example.pricecomparison.ui.compose.PasswordField
 import com.example.pricecomparison.ui.compose.Title
 import com.example.pricecomparison.ui.theme.LargePadding
+import com.tomcz.ellipse.common.collectAsState
+import com.tomcz.ellipse.common.previewProcessor
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(processor: RegisterProcessor) {
+    val firstName by processor.collectAsState { it.firstName }
+    val isFirstNameCorrect by processor.collectAsState { it.isFirstNameCorrect }
+    val lastName by processor.collectAsState { it.lastName }
+    val isLastNameCorrect by processor.collectAsState { it.isLastNameCorrect }
+    val username by processor.collectAsState { it.username }
+    val isUsernameCorrect by processor.collectAsState { it.isUsernameCorrect }
+    val email by processor.collectAsState { it.email }
+    val isEmailCorrect by processor.collectAsState { it.isEmailCorrect }
+    val password by processor.collectAsState { it.password }
+    val isPasswordCorrect by processor.collectAsState { it.isPasswordCorrect }
+    val repeatPassword by processor.collectAsState { it.repeatPassword }
+    val isRepeatPasswordCorrect by processor.collectAsState { it.isRepeatPasswordCorrect }
+    val focusManager = LocalFocusManager.current
+    val lastNameFocus = FocusRequester()
+    val usernameFocus = FocusRequester()
+    val emailFocus = FocusRequester()
+    val passwordFocus = FocusRequester()
+    val repeatPasswordFocus = FocusRequester()
+
     Column(
-        verticalArrangement = Arrangement.SpaceBetween,
+        verticalArrangement = Arrangement.spacedBy(30.dp),
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = LargePadding)
+            .verticalScroll(state = rememberScrollState())
     ) {
-
+        Spacer(modifier = Modifier.height(24.dp))
         Title()
-        Spacer(modifier = Modifier.height(30.dp))
-
+        Spacer(modifier = Modifier.height(12.dp))
+        NameField(
+            value = firstName,
+            keyboardActions = KeyboardActions { lastNameFocus.requestFocus() },
+            isNameCorrect = isFirstNameCorrect,
+            errorMessage = stringResource(id = R.string.register_wrong_first_name),
+            onValueChange = { processor.sendEvent(RegisterEvent.FirstNameChanged(it)) },
+        )
+        NameField(
+            value = lastName,
+            modifier = Modifier.focusRequester(lastNameFocus),
+            keyboardActions = KeyboardActions { usernameFocus.requestFocus() },
+            isNameCorrect = isLastNameCorrect,
+            errorMessage = stringResource(id = R.string.register_wrong_last_name),
+            onValueChange = { processor.sendEvent(RegisterEvent.LastNameChanged(it)) }
+        )
+        NameField(
+            value = username,
+            modifier = Modifier.focusRequester(usernameFocus),
+            keyboardActions = KeyboardActions { emailFocus.requestFocus() },
+            isNameCorrect = isUsernameCorrect,
+            errorMessage = stringResource(id = R.string.register_wrong_username),
+            onValueChange = { processor.sendEvent(RegisterEvent.UsernameChanged(it)) },
+        )
+        EmailField(
+            value = email,
+            modifier = Modifier.focusRequester(emailFocus),
+            keyboardActions = KeyboardActions { passwordFocus.requestFocus() },
+            isEmailCorrect = isEmailCorrect,
+            onValueChange = { processor.sendEvent(RegisterEvent.EmailChanged(it)) }
+        )
+        PasswordField(
+            value = password,
+            isPasswordCorrect = isPasswordCorrect,
+            keyboardActions = KeyboardActions { repeatPasswordFocus.requestFocus() },
+            modifier = Modifier.focusRequester(passwordFocus),
+            errorMessage = stringResource(id = R.string.common_wrong_password),
+            onValueChange = { processor.sendEvent(RegisterEvent.PasswordChanged(it)) }
+        )
+        PasswordField(
+            value = repeatPassword,
+            isPasswordCorrect = isRepeatPasswordCorrect,
+            keyboardActions = KeyboardActions { focusManager.clearFocus() },
+            errorMessage = stringResource(id = R.string.register_wrong_repeat_password),
+            onValueChange = { processor.sendEvent(RegisterEvent.RepeatPasswordChanged(it)) }
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun RegisterScreenPreview () {
-    RegisterScreen()
+fun RegisterScreenPreview() {
+    RegisterScreen(processor = previewProcessor(RegisterState()))
 }

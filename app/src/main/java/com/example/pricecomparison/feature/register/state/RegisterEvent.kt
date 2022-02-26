@@ -8,4 +8,16 @@ sealed interface RegisterEvent {
         val email: String,
         val password: String
     ) : RegisterEvent
+
+    data class FirstNameChanged(val firstName: String) : RegisterEvent
+
+    data class LastNameChanged(val lastName: String) : RegisterEvent
+
+    data class UsernameChanged(val username: String) : RegisterEvent
+
+    data class EmailChanged(val email: String) : RegisterEvent
+
+    data class PasswordChanged(val password: String) : RegisterEvent
+
+    data class RepeatPasswordChanged(val repeatPassword: String) : RegisterEvent
 }

@@ -28,8 +28,7 @@ fun Title() {
             painter = painterResource(id = R.drawable.ic_sale),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .height(64.dp)
+            modifier = Modifier.height(64.dp)
         )
         Text(
             text = stringResource(id = R.string.app_name),

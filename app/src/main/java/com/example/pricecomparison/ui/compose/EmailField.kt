@@ -1,6 +1,6 @@
 package com.example.pricecomparison.ui.compose
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.* // ktlint-disable no-wildcard-imports
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -11,23 +11,20 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import com.example.pricecomparison.R
-import com.example.pricecomparison.feature.login.LoginProcessor
-import com.example.pricecomparison.feature.login.state.LoginEvent
 import com.example.pricecomparison.ui.theme.LargePadding
 import com.example.pricecomparison.ui.theme.Shapes
 import com.example.pricecomparison.ui.theme.SmallPadding
-import com.tomcz.ellipse.common.collectAsState
 
 @Composable
 fun EmailField(
     value: String,
+    modifier: Modifier = Modifier,
     keyboardActions: KeyboardActions,
     isEmailCorrect: Boolean,
     onValueChange: (email: String) -> Unit
@@ -35,9 +32,9 @@ fun EmailField(
     Column {
         OutlinedTextField(
             value = value,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),
             shape = Shapes.medium,
-            onValueChange = { onValueChange(it) } ,
+            onValueChange = { onValueChange(it) },
             label = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -56,7 +53,7 @@ fun EmailField(
                 if (!isEmailCorrect) {
                     Icon(
                         imageVector = Icons.Filled.Error,
-                        contentDescription = stringResource(id = R.string.login_wrong_email),
+                        contentDescription = null,
                         tint = Color.Red
                     )
                 }
