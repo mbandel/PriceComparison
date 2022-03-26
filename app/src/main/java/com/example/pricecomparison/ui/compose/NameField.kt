@@ -23,8 +23,9 @@ import com.example.pricecomparison.ui.theme.SmallPadding
 
 @Composable
 fun NameField(
-    value: String,
     modifier: Modifier = Modifier,
+    hint: String = "",
+    value: String,
     keyboardActions: KeyboardActions,
     isNameCorrect: Boolean,
     errorMessage: String,
@@ -50,6 +51,7 @@ fun NameField(
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
             keyboardActions = keyboardActions,
+            isError = !isNameCorrect,
             trailingIcon = {
                 if (!isNameCorrect) {
                     Icon(
@@ -58,7 +60,7 @@ fun NameField(
                         tint = Color.Red
                     )
                 }
-            }
+            },
         )
         if (!isNameCorrect) {
             Text(

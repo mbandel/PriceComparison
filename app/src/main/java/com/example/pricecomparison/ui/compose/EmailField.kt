@@ -57,7 +57,8 @@ fun EmailField(
                         tint = Color.Red
                     )
                 }
-            }
+            },
+            isError = !isEmailCorrect
         )
         if (!isEmailCorrect) {
             Text(

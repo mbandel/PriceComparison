@@ -8,6 +8,7 @@
     <string name="login_invalid_credentials_error">Wrong email or password.\nTry again.</string>
     <string name="login_ok">OK</string>
 
+    <string name="register_register">Register</string>
     <string name="register_wrong_first_name">First name must contain at least 3 characters</string>
     <string name="register_wrong_last_name">Last name must contain at least 3 characters</string>
     <string name="register_wrong_username">Username must contain at least 3 characters</string>

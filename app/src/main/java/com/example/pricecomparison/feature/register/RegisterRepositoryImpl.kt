@@ -1,7 +1,6 @@
-package com.example.pricecomparison.feature.register.state
+package com.example.pricecomparison.feature.register
 
 import com.example.pricecomparison.apiservice.ApiService
-import com.example.pricecomparison.feature.register.RegisterRepository
 import com.example.pricecomparison.feature.register.data.RegisterDTO
 import com.example.pricecomparison.feature.register.data.RegisterStatus
 import kotlinx.coroutines.flow.Flow
@@ -15,9 +14,9 @@ class RegisterRepositoryImpl @Inject constructor(
     override fun signUp(registerDTO: RegisterDTO): Flow<RegisterStatus> = flow {
         emit(RegisterStatus.Loading)
         try {
-           val response = apiService.register(registerDTO = registerDTO)
+            val response = apiService.register(registerDTO = registerDTO)
             if (response.isSuccessful) {
-                emit(RegisterStatus.Success(response.body()))
+                emit(RegisterStatus.Success(response = response.body()))
             } else {
                 emit(RegisterStatus.EmailOrUsernameAlreadyExists)
             }
