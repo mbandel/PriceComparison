@@ -1,6 +1,5 @@
 package com.example.pricecomparison.ui.compose
 
-import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Tab
@@ -54,14 +53,9 @@ fun TabsLayout() {
             count = screens.size,
             state = pagerState,
         ) { page ->
-            println("is drag" + pagerState.interactionSource.collectIsDraggedAsState().value)
             screens[page].view()
         }
     }
-}
-
-@Composable
-private fun TabsContent(index: Int) {
 }
 
 @ExperimentalPagerApi
