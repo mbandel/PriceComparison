@@ -10,4 +10,6 @@ object FieldValidation {
         val passwordPattern = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}\$"
         return password.matches(Regex(passwordPattern))
     }
+
+    fun isNameValid(name: String): Boolean = name.length >= 2
 }

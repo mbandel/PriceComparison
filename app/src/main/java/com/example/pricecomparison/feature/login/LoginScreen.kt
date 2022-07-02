@@ -43,11 +43,11 @@ fun LoginScreen(processor: LoginProcessor) {
     val password by processor.collectAsState { it.password }
     val isPasswordCorrect by processor.collectAsState { it.isPasswordCorrect }
 
-    processor.collectEffect(collect = { event ->
-        when (event) {
+    processor.collectEffect { effect ->
+        when (effect) {
             is LoginEffect.GoToCategories -> println("Login Clicked")
         }
-    })
+    }
 
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
@@ -69,6 +69,7 @@ fun LoginScreen(processor: LoginProcessor) {
             )
             PasswordField(
                 value = password,
+                hint = stringResource(id = R.string.common_password),
                 isPasswordCorrect = isPasswordCorrect,
                 keyboardActions = KeyboardActions { focusManager.clearFocus() },
                 modifier = Modifier.focusRequester(passwordFocus),

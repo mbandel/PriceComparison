@@ -14,10 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import com.example.pricecomparison.R
 import com.example.pricecomparison.ui.theme.LargePadding
 import com.example.pricecomparison.ui.theme.Shapes
 import com.example.pricecomparison.ui.theme.SmallPadding
@@ -25,6 +23,7 @@ import com.example.pricecomparison.ui.theme.SmallPadding
 @Composable
 fun PasswordField(
     value: String,
+    hint: String = "",
     isPasswordCorrect: Boolean,
     keyboardActions: KeyboardActions,
     modifier: Modifier = Modifier,
@@ -47,7 +46,7 @@ fun PasswordField(
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(SmallPadding))
-                    Text(text = stringResource(id = R.string.login_password))
+                    Text(text = hint)
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),

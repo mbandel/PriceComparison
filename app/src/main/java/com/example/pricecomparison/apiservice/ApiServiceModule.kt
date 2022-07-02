@@ -21,7 +21,11 @@ object ApiServiceModule {
             .Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
-            .client(OkHttpClient())
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(HeaderInterceptor())
+                    .build()
+            )
             .build()
         return retrofit.create(ApiService::class.java)
     }

@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Price Comparison</string>
-    <string name="login_email">Email</string>
-    <string name="login_password">Password</string>
     <string name="login_login">Login</string>
     <string name="login_wrong_email">Incorrect email format</string>
     <string name="login_server_error">Connection error.\nTry again later</string>
@@ -9,10 +7,16 @@
     <string name="login_ok">OK</string>
 
     <string name="register_register">Register</string>
+    <string name="register_first_name">First name</string>
+    <string name="register_last_name">Last name</string>
+    <string name="register_repeat_password">Repeat password</string>
+    <string name="register_username">Username</string>
     <string name="register_wrong_first_name">First name must contain at least 3 characters</string>
     <string name="register_wrong_last_name">Last name must contain at least 3 characters</string>
     <string name="register_wrong_username">Username must contain at least 3 characters</string>
     <string name="register_wrong_repeat_password">Passwords are not the same</string>
 
     <string name="common_wrong_password">Password must contain at least 6 characters, one lower case letter, one upper case letter and one digit</string>
+    <string name="common_email">Email</string>
+    <string name="common_password">Password</string>
 </resources>

@@ -4,12 +4,18 @@ import androidx.compose.foundation.layout.* // ktlint-disable no-wildcard-import
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,6 +27,7 @@ import com.example.pricecomparison.ui.compose.NameField
 import com.example.pricecomparison.ui.compose.PasswordField
 import com.example.pricecomparison.ui.compose.Title
 import com.example.pricecomparison.ui.theme.LargePadding
+import com.example.pricecomparison.ui.theme.Shapes
 import com.tomcz.ellipse.common.collectAsState
 import com.tomcz.ellipse.common.previewProcessor
 
@@ -49,7 +56,10 @@ fun RegisterScreen(processor: RegisterProcessor) {
         verticalArrangement = Arrangement.spacedBy(30.dp),
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = LargePadding)
+            .padding(
+                horizontal = LargePadding,
+            )
+            .padding(bottom = 48.dp)
             .verticalScroll(state = rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(24.dp))
@@ -57,6 +67,7 @@ fun RegisterScreen(processor: RegisterProcessor) {
         Spacer(modifier = Modifier.height(12.dp))
         NameField(
             value = firstName,
+            hint = stringResource(id = R.string.register_first_name),
             keyboardActions = KeyboardActions { lastNameFocus.requestFocus() },
             isNameCorrect = isFirstNameCorrect,
             errorMessage = stringResource(id = R.string.register_wrong_first_name),
@@ -64,6 +75,7 @@ fun RegisterScreen(processor: RegisterProcessor) {
         )
         NameField(
             value = lastName,
+            hint = stringResource(id = R.string.register_last_name),
             modifier = Modifier.focusRequester(lastNameFocus),
             keyboardActions = KeyboardActions { usernameFocus.requestFocus() },
             isNameCorrect = isLastNameCorrect,
@@ -72,6 +84,7 @@ fun RegisterScreen(processor: RegisterProcessor) {
         )
         NameField(
             value = username,
+            hint = stringResource(id = R.string.register_username),
             modifier = Modifier.focusRequester(usernameFocus),
             keyboardActions = KeyboardActions { emailFocus.requestFocus() },
             isNameCorrect = isUsernameCorrect,
@@ -87,6 +100,7 @@ fun RegisterScreen(processor: RegisterProcessor) {
         )
         PasswordField(
             value = password,
+            hint = stringResource(id = R.string.common_password),
             isPasswordCorrect = isPasswordCorrect,
             keyboardActions = KeyboardActions { repeatPasswordFocus.requestFocus() },
             modifier = Modifier.focusRequester(passwordFocus),
@@ -95,11 +109,33 @@ fun RegisterScreen(processor: RegisterProcessor) {
         )
         PasswordField(
             value = repeatPassword,
+            hint = stringResource(id = R.string.register_repeat_password),
             isPasswordCorrect = isRepeatPasswordCorrect,
             keyboardActions = KeyboardActions { focusManager.clearFocus() },
+            modifier = Modifier.focusRequester(repeatPasswordFocus),
             errorMessage = stringResource(id = R.string.register_wrong_repeat_password),
             onValueChange = { processor.sendEvent(RegisterEvent.RepeatPasswordChanged(it)) }
         )
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                processor.sendEvent(RegisterEvent.RegisterClick)
+            },
+            shape = Shapes.medium,
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = colorResource(id = R.color.design_default_color_secondary_variant),
+                contentColor = Color.White
+            ),
+            enabled = isEmailCorrect &&
+                isPasswordCorrect &&
+                email.isNotEmpty() &&
+                password.isNotEmpty()
+        ) {
+            Text(
+                text = stringResource(id = R.string.login_login),
+                style = MaterialTheme.typography.h6
+            )
+        }
     }
 }
 

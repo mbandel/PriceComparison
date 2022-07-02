@@ -44,7 +44,7 @@ fun EmailField(
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(SmallPadding))
-                    Text(text = stringResource(id = R.string.login_email))
+                    Text(text = stringResource(id = R.string.common_email))
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
