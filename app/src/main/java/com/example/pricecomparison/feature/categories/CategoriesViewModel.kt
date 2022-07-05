@@ -8,6 +8,7 @@ import com.tomcz.ellipse.Processor
 import com.tomcz.ellipse.common.processor
 import com.tomcz.ellipse.common.toNoAction
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 typealias CategoriesProcessor = Processor<CategoriesEvent, CategoriesState, CategoriesEffect>
@@ -18,6 +19,7 @@ class CategoriesViewModel @Inject constructor(
 ) : ViewModel() {
     val processor: CategoriesProcessor = processor(
         initialState = CategoriesState(),
+        prepare = {},
         onEvent = { event ->
             when (event) {
                 is CategoriesEvent.OnItemClick ->

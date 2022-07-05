@@ -26,12 +26,12 @@ class LoginViewModel @Inject constructor(
         when (event) {
             is LoginEvent.EmailChanged -> handleEmailChanged(event.email)
             is LoginEvent.PasswordChanged -> handlePasswordChange(event.password)
+            is LoginEvent.ConfirmServerError -> flowOf(LoginPartialState.HideServerError)
+            is LoginEvent.ConfirmInvalidCredentialsError -> flowOf(LoginPartialState.HideInvalidCredentialsError)
             is LoginEvent.LoginClick -> loginUseCase(
                 effects = effects,
                 credentials = LoginCredentials(event.email, event.password)
             )
-            is LoginEvent.ConfirmServerError -> flowOf(LoginPartialState.HideServerError)
-            is LoginEvent.ConfirmInvalidCredentialsError -> flowOf(LoginPartialState.HideInvalidCredentialsError)
         }
     }
 
