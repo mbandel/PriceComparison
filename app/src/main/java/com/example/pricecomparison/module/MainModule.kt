@@ -5,10 +5,15 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.pricecomparison.apiservice.ApiConst
+import com.example.pricecomparison.apiservice.ApiService
+import com.example.pricecomparison.apiservice.HeaderInterceptor
 import com.example.pricecomparison.datastore.DataStorage
 import com.example.pricecomparison.datastore.DataStorageImpl
 import com.example.pricecomparison.feature.categories.CategoriesRepository
 import com.example.pricecomparison.feature.categories.CategoriesRepositoryImpl
+import com.example.pricecomparison.feature.categories.usecase.GetCategoriesUseCase
+import com.example.pricecomparison.feature.categories.usecase.GetCategoriesUseCaseImpl
 import com.example.pricecomparison.feature.login.LoginRepository
 import com.example.pricecomparison.feature.login.LoginRepositoryImpl
 import com.example.pricecomparison.feature.login.LoginUseCase
@@ -22,6 +27,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -54,6 +62,11 @@ interface MainModule {
     fun bindCategoriesRepository(
         categoriesRepositoryImpl: CategoriesRepositoryImpl
     ): CategoriesRepository
+
+    @Binds
+    fun bindCategoriesUseCase(
+        getCategoriesUseCaseImpl: GetCategoriesUseCaseImpl
+    ): GetCategoriesUseCase
 }
 
 @Module
@@ -67,5 +80,21 @@ object ProvidesModule {
     @Singleton
     fun provideDataStore(context: Application): DataStore<Preferences> {
         return context.dataStore
+    }
+
+    @Provides
+    @Singleton
+    fun provideServiceApi(dataStorage: DataStorage): ApiService {
+        val retrofit = Retrofit
+            .Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(ApiConst.BASE_URL)
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(HeaderInterceptor(dataStorage = dataStorage))
+                    .build()
+            )
+            .build()
+        return retrofit.create(ApiService::class.java)
     }
 }

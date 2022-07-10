@@ -14,10 +14,15 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.pricecomparison.R
 import com.example.pricecomparison.feature.login.state.LoginEffect
 import com.example.pricecomparison.feature.login.state.LoginEvent
 import com.example.pricecomparison.feature.login.state.LoginState
+import com.example.pricecomparison.navigation.CategoriesScreen
 import com.example.pricecomparison.ui.compose.EmailField
 import com.example.pricecomparison.ui.compose.ErrorSnackBar
 import com.example.pricecomparison.ui.compose.PasswordField
@@ -29,7 +34,9 @@ import com.tomcz.ellipse.common.collectEffect
 import com.tomcz.ellipse.common.previewProcessor
 
 @Composable
-fun LoginScreen(processor: LoginProcessor) {
+fun LoginScreen(
+    processor: LoginProcessor = viewModel<LoginViewModel>().processor
+) {
     val focusManager = LocalFocusManager.current
     val passwordFocus = FocusRequester()
     val isShowingServerError by processor.collectAsState {
@@ -42,10 +49,12 @@ fun LoginScreen(processor: LoginProcessor) {
     val isEmailCorrect by processor.collectAsState { it.isEmailCorrect }
     val password by processor.collectAsState { it.password }
     val isPasswordCorrect by processor.collectAsState { it.isPasswordCorrect }
+    val navController = rememberNavController()
+    val navigator = LocalNavigator.currentOrThrow
 
     processor.collectEffect { effect ->
         when (effect) {
-            is LoginEffect.GoToCategories -> println("Login Clicked")
+            is LoginEffect.GoToCategories -> navigator.push(CategoriesScreen)
         }
     }
 

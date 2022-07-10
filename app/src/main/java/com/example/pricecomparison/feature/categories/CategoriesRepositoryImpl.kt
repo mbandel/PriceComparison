@@ -13,9 +13,12 @@ class CategoriesRepositoryImpl @Inject constructor(
     override fun getCategories(): Flow<CategoriesStatus> = flow {
         try {
             val response = apiService.getCategories()
-            if (response.isSuccessful)
+            if (response.isSuccessful) {
                 emit(CategoriesStatus.Success(categories = response.body()!!))
+                println("categoeries success: ${response.body()}")
+            }
         } catch (e: Exception) {
+            println("Categories error ${e.message}")
             emit(CategoriesStatus.ServerError)
         }
     }

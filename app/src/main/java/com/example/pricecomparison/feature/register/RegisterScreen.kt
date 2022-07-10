@@ -1,6 +1,6 @@
 package com.example.pricecomparison.feature.register
 
-import androidx.compose.foundation.layout.* // ktlint-disable no-wildcard-imports
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
@@ -19,6 +19,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.pricecomparison.R
 import com.example.pricecomparison.feature.register.state.RegisterEvent
 import com.example.pricecomparison.feature.register.state.RegisterState
@@ -32,7 +33,9 @@ import com.tomcz.ellipse.common.collectAsState
 import com.tomcz.ellipse.common.previewProcessor
 
 @Composable
-fun RegisterScreen(processor: RegisterProcessor) {
+fun RegisterScreen(
+    processor: RegisterProcessor = viewModel<RegisterViewModel>().processor
+) {
     val firstName by processor.collectAsState { it.firstName }
     val isFirstNameCorrect by processor.collectAsState { it.isFirstNameCorrect }
     val lastName by processor.collectAsState { it.lastName }

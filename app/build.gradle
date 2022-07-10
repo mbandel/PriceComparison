@@ -121,4 +121,17 @@ dependencies {
 
     //Mockk
     testImplementation "io.mockk:mockk:$mockk_version"
+
+    //voyager
+    // Navigator
+    implementation "cafe.adriel.voyager:voyager-navigator:$voyager_version"
+
+    // BottomSheetNavigator
+    implementation "cafe.adriel.voyager:voyager-bottom-sheet-navigator:$voyager_version"
+
+    // TabNavigator
+    implementation "cafe.adriel.voyager:voyager-tab-navigator:$voyager_version"
+
+    // Transitions
+    implementation "cafe.adriel.voyager:voyager-transitions:$voyager_version"
 }

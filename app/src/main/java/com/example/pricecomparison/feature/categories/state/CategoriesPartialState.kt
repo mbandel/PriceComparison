@@ -8,4 +8,14 @@ sealed interface CategoriesPartialState : PartialState<CategoriesState> {
         override fun reduce(oldState: CategoriesState): CategoriesState =
             oldState.copy(categories = categories)
     }
+
+    object ShowConnectionError : CategoriesPartialState {
+        override fun reduce(oldState: CategoriesState): CategoriesState =
+            oldState.copy(isConnectionError = true)
+    }
+
+    object HideConnectionError : CategoriesPartialState {
+        override fun reduce(oldState: CategoriesState): CategoriesState =
+            oldState.copy(isConnectionError = false)
+    }
 }

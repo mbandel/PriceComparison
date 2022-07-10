@@ -14,15 +14,20 @@ import javax.inject.Singleton
 
 @Singleton
 class HeaderInterceptor @Inject constructor(
+    private val dataStorage: DataStorage
 ) : Interceptor {
-    @Inject
-    internal lateinit var dataStorage: DataStorage
-
     override fun intercept(chain: Interceptor.Chain): Response = runBlocking {
+        println("interceptor dziala")
         try {
             when (val authToken = dataStorage.read(key = AUTH_TOKEN)) {
-                "" -> TODO() // logout
+                "" -> chain.run {
+                    println("interceptor, empty token")
+                    proceed(
+                        request().newBuilder().build()
+                    )
+                }
                 else -> {
+                    println("interceptor, authToken: $authToken")
                     chain.run {
                         proceed(
                             request()
@@ -35,6 +40,7 @@ class HeaderInterceptor @Inject constructor(
                 }
             }
         } catch (e: Exception) {
+            println("interceptor exception ${e.message}")
             chain.run {
                 proceed(
                     request().newBuilder().build()

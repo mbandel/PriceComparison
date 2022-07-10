@@ -23,6 +23,7 @@ buildscript {
         esspresso_core_version = '3.4.0'
         build_gradle_version = '7.0.4'
         constraint_layout_compose_version = '1.0.0-rc02'
+        voyager_version = '1.0.0-rc02'
     }
     repositories {
         google()
