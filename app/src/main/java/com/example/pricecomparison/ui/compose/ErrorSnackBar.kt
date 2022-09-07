@@ -11,7 +11,10 @@ import com.example.pricecomparison.R
 import com.example.pricecomparison.ui.theme.SmallPadding
 
 @Composable
-fun ErrorSnackBar(message: String, sendEvent: () -> Unit) {
+fun ErrorSnackBar(
+    message: String,
+    sendEvent: () -> Unit
+) {
     Snackbar(
         modifier = Modifier.padding(SmallPadding),
         action = {

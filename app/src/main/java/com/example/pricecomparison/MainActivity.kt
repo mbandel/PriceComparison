@@ -13,9 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // val viewModel: LoginViewModel by viewModels()
         setContent {
-//            LoginScreen(processor = viewModel<LoginViewModel>().processor)
             Navigator(screen = TabsLayout)
         }
     }

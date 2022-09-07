@@ -15,15 +15,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.pricecomparison.R
 import com.example.pricecomparison.feature.categories.data.Category
-import com.example.pricecomparison.feature.categories.state.CategoriesEvent
+import com.example.pricecomparison.feature.categories.state.CategoriesState
+import com.example.pricecomparison.navigation.ProductsScreen
 import com.example.pricecomparison.ui.theme.MediumPadding
 import com.example.pricecomparison.ui.theme.SmallPadding
 import com.tomcz.ellipse.common.collectAsState
+import com.tomcz.ellipse.common.previewProcessor
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -31,16 +36,18 @@ fun CategoriesScreen(
     processor: CategoriesProcessor = viewModel<CategoriesViewModel>().processor
 ) {
     val categories by processor.collectAsState { it.categories }
+    val navigator = LocalNavigator.currentOrThrow
+
     LazyVerticalGrid(
         cells = GridCells.Fixed(count = 2),
         modifier = Modifier.fillMaxHeight(),
-        contentPadding = PaddingValues(SmallPadding),
+        contentPadding = PaddingValues(SmallPadding)
     ) {
         items(categories) { category ->
             CategoryItem(
                 category = category,
                 onClick = {
-                    processor.sendEvent(CategoriesEvent.OnItemClick(categoryId = category.id))
+                    navigator.push(ProductsScreen(category.id))
                 }
             )
         }
@@ -56,7 +63,7 @@ private fun CategoryItem(category: Category, onClick: () -> Unit) {
     ) {
         Column(
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = getCategoryImage(name = category.name),
@@ -88,4 +95,10 @@ private fun getCategoryImage(name: String): Painter {
         "przyprawy" -> painterResource(id = R.drawable.spices)
         else -> painterResource(id = R.drawable.ic_bread)
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun Preview() {
+    CategoriesScreen(processor = previewProcessor(CategoriesState()))
 }

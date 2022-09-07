@@ -18,6 +18,8 @@ import com.example.pricecomparison.feature.login.LoginRepository
 import com.example.pricecomparison.feature.login.LoginRepositoryImpl
 import com.example.pricecomparison.feature.login.LoginUseCase
 import com.example.pricecomparison.feature.login.LoginUseCaseImpl
+import com.example.pricecomparison.feature.products.usecase.FetchProductsUseCase
+import com.example.pricecomparison.feature.products.usecase.FetchProductsUseCaseImpl
 import com.example.pricecomparison.feature.register.RegisterRepository
 import com.example.pricecomparison.feature.register.RegisterRepositoryImpl
 import com.example.pricecomparison.feature.register.usecase.RegisterUseCase
@@ -67,6 +69,11 @@ interface MainModule {
     fun bindCategoriesUseCase(
         getCategoriesUseCaseImpl: GetCategoriesUseCaseImpl
     ): GetCategoriesUseCase
+
+    @Binds
+    fun bindFetchProductsUseCase(
+        fetchProductsUseCaseImpl: FetchProductsUseCaseImpl
+    ): FetchProductsUseCase
 }
 
 @Module

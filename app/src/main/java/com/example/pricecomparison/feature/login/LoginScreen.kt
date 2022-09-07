@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.pricecomparison.R
@@ -49,7 +48,6 @@ fun LoginScreen(
     val isEmailCorrect by processor.collectAsState { it.isEmailCorrect }
     val password by processor.collectAsState { it.password }
     val isPasswordCorrect by processor.collectAsState { it.isPasswordCorrect }
-    val navController = rememberNavController()
     val navigator = LocalNavigator.currentOrThrow
 
     processor.collectEffect { effect ->
@@ -95,16 +93,18 @@ fun LoginScreen(
         }
 
         Column {
-            if (isShowingServerError)
+            if (isShowingServerError) {
                 ErrorSnackBar(
                     message = stringResource(id = R.string.login_server_error),
                     sendEvent = { processor.sendEvent(LoginEvent.ConfirmServerError) }
                 )
-            if (isShowingInvalidCredentialsError)
+            }
+            if (isShowingInvalidCredentialsError) {
                 ErrorSnackBar(
                     message = stringResource(id = R.string.login_invalid_credentials_error),
                     sendEvent = { processor.sendEvent(LoginEvent.ConfirmInvalidCredentialsError) }
                 )
+            }
         }
     }
 }
@@ -145,8 +145,9 @@ private fun LoginButton(processor: LoginProcessor) {
 @Composable
 private fun ProgressIndicator(processor: LoginProcessor) {
     val isLoading by processor.collectAsState { it.isLoading }
-    if (isLoading)
+    if (isLoading) {
         LinearProgressIndicator()
+    }
 }
 
 @Preview(showBackground = true)

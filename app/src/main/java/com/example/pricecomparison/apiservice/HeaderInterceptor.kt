@@ -17,7 +17,6 @@ class HeaderInterceptor @Inject constructor(
     private val dataStorage: DataStorage
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response = runBlocking {
-        println("interceptor dziala")
         try {
             when (val authToken = dataStorage.read(key = AUTH_TOKEN)) {
                 "" -> chain.run {
