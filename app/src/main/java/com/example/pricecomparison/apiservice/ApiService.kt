@@ -2,13 +2,14 @@ package com.example.pricecomparison.apiservice
 
 import com.example.pricecomparison.apiservice.ApiConst.AUTHENTICATE_URL
 import com.example.pricecomparison.apiservice.ApiConst.CATEGORIES_URL
+import com.example.pricecomparison.apiservice.ApiConst.PRODUCTS
 import com.example.pricecomparison.apiservice.ApiConst.PRODUCTS_BY_CATEGORY_URL
 import com.example.pricecomparison.apiservice.ApiConst.REGISTER_URL
-import com.example.pricecomparison.feature.categories.data.Category
 import com.example.pricecomparison.feature.login.data.LoginCredentials
 import com.example.pricecomparison.feature.login.data.LoginResponse
 import com.example.pricecomparison.feature.register.data.RegisterDTO
 import com.example.pricecomparison.feature.register.data.RegisterResponse
+import com.example.pricecomparison.model.Category
 import com.example.pricecomparison.model.Product
 import retrofit2.Response
 import retrofit2.http.Body
@@ -28,4 +29,7 @@ interface ApiService {
 
     @GET("$PRODUCTS_BY_CATEGORY_URL{id}")
     suspend fun getProductsByCategoryId(@Path("id") id: Int): Response<List<Product>>
+
+    @GET(PRODUCTS)
+    suspend fun getAllProducts(): Response<List<Product>>
 }

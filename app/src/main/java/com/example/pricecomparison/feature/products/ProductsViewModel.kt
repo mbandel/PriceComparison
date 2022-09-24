@@ -1,6 +1,7 @@
 package com.example.pricecomparison.feature.products
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.pricecomparison.feature.products.state.ProductsEvent
 import com.example.pricecomparison.feature.products.state.ProductsState
 import com.example.pricecomparison.feature.products.usecase.FetchProductsUseCase
@@ -20,7 +21,10 @@ class ProductsViewModel @Inject constructor(
         initialState = ProductsState(),
         onEvent = { event ->
             when (event) {
-                is ProductsEvent.FetchProducts -> fetchProductsUseCase(categoryId = event.categoryId)
+                is ProductsEvent.FetchProducts -> fetchProductsUseCase(
+                    categoryId = event.categoryId,
+                    coroutineScope = viewModelScope
+                )
                 ProductsEvent.RefreshProducts -> flowOf()
             }
         }

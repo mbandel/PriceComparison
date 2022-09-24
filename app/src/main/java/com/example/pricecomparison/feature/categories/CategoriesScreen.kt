@@ -2,7 +2,13 @@ package com.example.pricecomparison.feature.categories
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
@@ -22,7 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import com.example.pricecomparison.R
-import com.example.pricecomparison.feature.categories.data.Category
+import com.example.pricecomparison.feature.categories.data.CategoryItem
 import com.example.pricecomparison.feature.categories.state.CategoriesState
 import com.example.pricecomparison.navigation.ProductsScreen
 import com.example.pricecomparison.ui.theme.MediumPadding
@@ -56,7 +62,7 @@ fun CategoriesScreen(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-private fun CategoryItem(category: Category, onClick: () -> Unit) {
+private fun CategoryItem(category: CategoryItem, onClick: () -> Unit) {
     Card(
         onClick = onClick,
         modifier = Modifier.padding(all = MediumPadding)

@@ -24,6 +24,8 @@ buildscript {
         build_gradle_version = '7.0.4'
         constraint_layout_compose_version = '1.0.0-rc02'
         voyager_version = '1.0.0-rc02'
+        moshi_version = '1.13.0'
+        moshi_converter_version = '2.9.0'
     }
     repositories {
         google()

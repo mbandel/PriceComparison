@@ -1,8 +1,8 @@
 package com.example.pricecomparison.feature.categories.state
 
-import com.example.pricecomparison.feature.categories.data.Category
+import com.example.pricecomparison.feature.categories.data.CategoryItem
 
 data class CategoriesState(
-    val categories: List<Category> = listOf(),
+    val categories: List<CategoryItem> = listOf(),
     val isConnectionError: Boolean = false
 )
